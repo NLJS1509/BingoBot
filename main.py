@@ -4,11 +4,13 @@ from aiogram.client.bot import DefaultBotProperties
 import asyncio
 import logging
 from other import config
+from other import Database
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(config.TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
+db = Database('database.db')
 
 
 async def main():

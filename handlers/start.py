@@ -2,10 +2,11 @@ from aiogram import types, F
 from aiogram.types import FSInputFile
 from aiogram.filters import Command
 
-from main import dp, bot
+from main import dp, bot, db
 from other.generate_image import generate_image, phrases
 from keyboards import generate_more_btn
-from other import set_commands
+from other import set_commands_user, set_commands_admin
+from other import ADMIN_ID
 
 import random
 import string
@@ -14,7 +15,13 @@ import os
 
 @dp.message(Command('start', 'restart'))
 async def start(msg: types.Message):
-    await set_commands(bot)
+    if not await db.user_exists(msg.from_user.id):  # if the user is not registered
+        await db.add_user(msg.from_user.id)
+
+    if msg.from_user.id in ADMIN_ID:
+        await set_commands_admin(bot)
+    else:
+        await set_commands_user(bot)
 
     letters = string.ascii_lowercase
     rand_name = ''.join(random.choice(letters) for _ in range(5))
@@ -51,3 +58,8 @@ async def generate(call: types.CallbackQuery):
         os.remove(f"img/{rand_name}.png")
     except:
         await call.message.answer("Извини, произошла ошибка\nПопробуй позже")
+
+
+@dp.message(Command('count_users'))
+async def count_users(msg: types.Message):
+    await msg.answer(f"Количество пользователей: <b>{await db.all_users()}</b>")
