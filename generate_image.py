@@ -1,12 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
-import random
-
-# numbers for loop
-a = 0
-b = 0
-c = 0
-x = 0
-y = 0
+from random import randint
 
 # all phrases
 phrases = [
@@ -538,89 +531,90 @@ phrases = [
     },  # 13
 ]
 
-# generate random number
-num = random.randint(1, 3)
 
-# open random image
-image = Image.open(f"background/{num}.png")
+async def generate_image(phrases: dict, img: str, a=0, b=0, c=0, x=0, y=0):
+    # generate random number
+    num = randint(1, 3)
 
-# creating a filter list
-indices = []
+    # open random image
+    image = Image.open(f"background/{num}.png")
 
-# cell filling
-while a < 25:
-    # generate index
-    i = random.randint(0, len(phrases) - 1)
+    # creating a filter list
+    indices = []
 
-    # adding text to cells
-    if i not in indices:
-        a += 1
+    # cell filling
+    while a < 25:
+        # generate index
+        i = randint(0, len(phrases) - 1)
 
-        # loop
-        if a == 1:
-            x = phrases[i]['coordinates'][0]['x']
-            y = phrases[i]['coordinates'][0]['y']
-        elif a in [2, 3, 4, 5]:
-            b += 196
-            x = phrases[i]['coordinates'][0]['x'] + b
-            y = phrases[i]['coordinates'][0]['y']
-        elif a == 6:
-            c += 165
-            b = 0
-            x = phrases[i]['coordinates'][0]['x']
-            y = phrases[i]['coordinates'][0]['y'] + c
-        elif a in [7, 8, 9, 10]:
-            b += 196
-            x = phrases[i]['coordinates'][0]['x'] + b
-            y = phrases[i]['coordinates'][0]['y'] + c
-        elif a == 11:
-            c += 185
-            b = 0
-            x = phrases[i]['coordinates'][0]['x']
-            y = phrases[i]['coordinates'][0]['y'] + c
-        elif a in [12, 13, 14, 15]:
-            b += 196
-            x = phrases[i]['coordinates'][0]['x'] + b
-            y = phrases[i]['coordinates'][0]['y'] + c
-        elif a == 16:
-            c += 175
-            b = 0
-            x = phrases[i]['coordinates'][0]['x']
-            y = phrases[i]['coordinates'][0]['y'] + c
-        elif a in [17, 18, 19, 20]:
-            b += 196
-            x = phrases[i]['coordinates'][0]['x'] + b
-            y = phrases[i]['coordinates'][0]['y'] + c
-        elif a == 21:
-            c += 175
-            b = 0
-            x = phrases[i]['coordinates'][0]['x']
-            y = phrases[i]['coordinates'][0]['y'] + c
-        elif a in [22, 23, 24, 25]:
-            b += 196
-            x = phrases[i]['coordinates'][0]['x'] + b
-            y = phrases[i]['coordinates'][0]['y'] + c
+        # adding text to cells
+        if i not in indices:
+            a += 1
 
-        # select font
-        font = ImageFont.truetype('font/Unbounded-Regular.ttf', phrases[i]['font_size'])
+            # loop
+            if a == 1:
+                x = phrases[i]['coordinates'][0]['x']
+                y = phrases[i]['coordinates'][0]['y']
+            elif a in [2, 3, 4, 5]:
+                b += 196
+                x = phrases[i]['coordinates'][0]['x'] + b
+                y = phrases[i]['coordinates'][0]['y']
+            elif a == 6:
+                c += 165
+                b = 0
+                x = phrases[i]['coordinates'][0]['x']
+                y = phrases[i]['coordinates'][0]['y'] + c
+            elif a in [7, 8, 9, 10]:
+                b += 196
+                x = phrases[i]['coordinates'][0]['x'] + b
+                y = phrases[i]['coordinates'][0]['y'] + c
+            elif a == 11:
+                c += 185
+                b = 0
+                x = phrases[i]['coordinates'][0]['x']
+                y = phrases[i]['coordinates'][0]['y'] + c
+            elif a in [12, 13, 14, 15]:
+                b += 196
+                x = phrases[i]['coordinates'][0]['x'] + b
+                y = phrases[i]['coordinates'][0]['y'] + c
+            elif a == 16:
+                c += 175
+                b = 0
+                x = phrases[i]['coordinates'][0]['x']
+                y = phrases[i]['coordinates'][0]['y'] + c
+            elif a in [17, 18, 19, 20]:
+                b += 196
+                x = phrases[i]['coordinates'][0]['x'] + b
+                y = phrases[i]['coordinates'][0]['y'] + c
+            elif a == 21:
+                c += 175
+                b = 0
+                x = phrases[i]['coordinates'][0]['x']
+                y = phrases[i]['coordinates'][0]['y'] + c
+            elif a in [22, 23, 24, 25]:
+                b += 196
+                x = phrases[i]['coordinates'][0]['x'] + b
+                y = phrases[i]['coordinates'][0]['y'] + c
 
-        # font color selection
-        if num == 3:
-            fill = 'black'
-        else:
-            fill = 'white'
+            # select font
+            font = ImageFont.truetype('font/Unbounded-Regular.ttf', phrases[i]['font_size'])
 
-        # adding text to the background
-        drawer = ImageDraw.Draw(image)
-        drawer.text((x, y), phrases[i]['text'], font=font, fill=fill)
+            # font color selection
+            if num == 3:
+                fill = 'black'
+            else:
+                fill = 'white'
 
-        # adding an index to a list
-        indices.append(i)
+            # adding text to the background
+            drawer = ImageDraw.Draw(image)
+            drawer.text((x, y), phrases[i]['text'], font=font, fill=fill)
 
-    # clear list
-    if a == 25:
-        indices.clear()
+            # adding an index to a list
+            indices.append(i)
 
-# save image
-image.save('img/img.png')
-image.show()
+        # clear list
+        if a == 25:
+            indices.clear()
+
+    # save image
+    image.save(f'img/{img}.png')
