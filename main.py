@@ -3,7 +3,7 @@ from aiogram.methods import DeleteWebhook
 from aiogram.client.bot import DefaultBotProperties
 import asyncio
 import logging
-import config
+from other import config
 
 logging.basicConfig(level=logging.INFO)
 

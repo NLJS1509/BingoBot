@@ -1,18 +1,21 @@
 from aiogram import types, F
 from aiogram.types import FSInputFile
-from aiogram.filters import CommandStart
+from aiogram.filters import Command
 
 from main import dp, bot
-from generate_image import generate_image, phrases
+from other.generate_image import generate_image, phrases
 from keyboards import generate_more_btn
+from other import set_commands
 
 import random
 import string
 import os
 
 
-@dp.message(CommandStart())
+@dp.message(Command('start', 'restart'))
 async def start(msg: types.Message):
+    await set_commands(bot)
+
     letters = string.ascii_lowercase
     rand_name = ''.join(random.choice(letters) for _ in range(5))
     await generate_image(phrases, img=rand_name)
